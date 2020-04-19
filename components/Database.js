@@ -54,6 +54,7 @@ export default {
       database.transaction(
         tx => {
           tx.executeSql("delete from notas where id = ?", [id],
+          Alert.alert("Nota Eliminada com Sucesso!")
           );
         },
         null,
@@ -65,6 +66,7 @@ export default {
         database.transaction(
             tx => {
               tx.executeSql("update notas set descricao=? where id=?", [descricao, id],
+              Alert.alert("Nota Editada com Sucesso!")
               );
             },
            null,

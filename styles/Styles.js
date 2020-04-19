@@ -71,10 +71,14 @@ export default StyleSheet.create({
         padding: 10,
     },
     modalView: {
-        margin: 20,
+        marginRight: 20,
+        marginLeft: 20,
+        marginBottom: 20,
         backgroundColor: "white",
         borderRadius: 20,
-        padding: 35,
+        paddingLeft: 30,
+        paddingBottom: 30,
+        paddingRight: 30,
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
