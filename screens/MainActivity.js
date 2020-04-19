@@ -3,6 +3,8 @@ import {Text, View, Image,StyleSheet, Button,TouchableOpacity, StatusBar, EventE
 import Styles from '../styles/Styles'
 import Logo from '../assets/logo.png'
 
+console.disableYellowBox = true;
+
 export default class MainActivity extends React.Component{
 
   constructor(props) {

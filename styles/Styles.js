@@ -56,5 +56,29 @@ export default StyleSheet.create({
         backgroundColor: '#164094',
         width: "90%",
         padding: 10,
-    }
+    },
+    doublebutton1: {
+        marginTop: 16,
+        backgroundColor: '#164094',
+        width: "50%",
+        padding: 10,
+    },
+    doublebutton2: {
+        marginTop: 16,
+        backgroundColor: '#164094',
+        marginLeft: 5,
+        width: "50%",
+        padding: 10,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+    }}
 });

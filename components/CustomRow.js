@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     date: {
-        fontSize: 16,
+        fontSize: 14,
         color: '#000',
     },
     container_text: {

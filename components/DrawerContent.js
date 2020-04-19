@@ -1,7 +1,7 @@
 import React from 'react';
-import {View,StatusBar} from 'react-native';
-import { DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
-import {Avatar,Title,Drawer,} from 'react-native-paper'
+import { View, StatusBar } from 'react-native';
+import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
+import { Avatar, Title, Drawer, } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from '../styles/Styles'
 
@@ -41,10 +41,67 @@ export function DrawerContent(props) {
                             onPress={() => props.navigation.navigate('NotasAnonimo')}
                         />
 
-</Drawer.Section>
-</View>
-</DrawerContentScrollView>
+                    </Drawer.Section>
+                    <Drawer.Section>
+                        <Title style={styles.userprofile}>Informações</Title>
+                        <DrawerItem
+                            icon={({color}) => (
+                                <Icon
+                                    name="question-circle-o"
+                                    color={color}
+                                    size={28}
+                                />
+                            )}
+                            label="Suporte"
+                            labelStyle={{ color: 'black', fontSize: 12 }}
+                            onPress={() => props.navigation.navigate('Sup')}
+                        />
 
-</View>
-)
+                        <DrawerItem
+                            icon={({color}) => (
+                                <Icon
+                                    name="share-alt"
+                                    color={color}
+                                    size={28}
+                                />
+                            )}
+                            label="Créditos"
+                            labelStyle={{ color: 'black', fontSize: 12 }}
+                            onPress={() => props.navigation.navigate('Credits')}
+                        />
+
+                    </Drawer.Section>
+                    <Title style={styles.userprofile}>Conta</Title>
+                    <DrawerItem
+                            icon={({color}) => (
+                                <Icon
+                                    name="wrench"
+                                    color={color}
+                                    size={28}
+                                />
+                            )}
+                            label="Defenições"
+                            labelStyle={{ color: 'black', fontSize: 12 }}
+                            onPress={() => props.navigation.navigate('Defs')}
+                        />
+                        <DrawerItem
+                            icon={({color}) => (
+                                <Icon
+                                    name="sign-out"
+                                    color={color}
+                                    size={28}
+                                />
+                            )}
+                            label="Log Out"
+                            labelStyle={{ color: 'black', fontSize: 12 }}
+                            onPress={() => props.navigation.popToTop()}
+                        />
+                    <Drawer.Section>
+
+                    </Drawer.Section>
+                </View>
+            </DrawerContentScrollView>
+
+        </View>
+    )
 }
