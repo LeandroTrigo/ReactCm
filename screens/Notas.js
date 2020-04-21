@@ -1,9 +1,10 @@
 import * as React from 'react';
-import {View, Text, TouchableOpacity,FlatList, Modal, TextInput, Alert} from 'react-native';
+import {View, Text, TouchableOpacity,FlatList, Modal, TextInput} from 'react-native';
 import Styles from '../styles/Styles'
 import CustomRow from '../components/CustomRow'
 import Database from '../components/Database'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Languages from '../components/Language'
 
 var today = new Date(),date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
@@ -119,7 +120,7 @@ export default class NotasScreen extends React.Component {
         style={Styles.buttonaddnota}
         onPress ={this.setModalVisible}>
         <Text style={Styles.ButtonsText}>
-                          Adiciona Nova Nota
+        {Languages.t('newnota')}
                       </Text>
         </TouchableOpacity>
 
@@ -138,10 +139,10 @@ export default class NotasScreen extends React.Component {
                                 />
 
         </TouchableOpacity>
-            <Text style={{fontSize: 20,fontWeight: "bold"}}>Nova Nota</Text>
+            <Text style={{fontSize: 20,fontWeight: "bold"}}>{Languages.t('newnota2')}</Text>
             <TextInput
             style={{height: 80,textAlign: "center"}}
-            placeholder="Introduza uma Nota!"
+            placeholder={Languages.t('insertnota')}
             onChangeText={this.handleValor}
             maxLength={200}
       />
@@ -150,7 +151,7 @@ export default class NotasScreen extends React.Component {
         style={Styles.buttonaddnota}
         onPress ={this.addNota}>
         <Text style={Styles.ButtonsText}>
-                          Adiciona Nota
+                          {Languages.t('newnota3')}
                       </Text>
         </TouchableOpacity>
         </View>
@@ -173,7 +174,7 @@ export default class NotasScreen extends React.Component {
 
         </TouchableOpacity>
           
-            <Text style={{fontSize: 20,fontWeight: "bold"}}>Editar Nota</Text>
+            <Text style={{fontSize: 20,fontWeight: "bold"}}>{Languages.t('editnota')}</Text>
             <TextInput
             style={{height: 80,textAlign: "center"}}
             value={this.state.textEdit}
@@ -186,14 +187,14 @@ export default class NotasScreen extends React.Component {
         style={Styles.doublebutton1}
         onPress ={this.EliminarNota}>
         <Text style={Styles.ButtonsText}>
-                         Eliminar
+                        {Languages.t('eliminar')}
                       </Text>
         </TouchableOpacity>
             <TouchableOpacity  
         style={Styles.doublebutton2}
         onPress ={this.EditarNota}>
         <Text style={Styles.ButtonsText}>
-                         Editar
+                        {Languages.t('editar')}
                       </Text>
         </TouchableOpacity>
         </View>

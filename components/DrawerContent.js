@@ -4,6 +4,7 @@ import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { Avatar, Title, Drawer, } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from '../styles/Styles'
+import Languages from '../components/Language'
 
 
 
@@ -21,13 +22,13 @@ export function DrawerContent(props) {
                                 size={100}
                             />
                             <View>
-                                <Title style={styles.username}>Anónimo</Title>
+                            <Title style={styles.username}>{Languages.t('anonimotitulo')}</Title>
                             </View>
                         </View>
                     </View>
 
                     <Drawer.Section>
-                        <Title style={styles.userprofile}>Operações</Title>
+                        <Title style={styles.userprofile}>{Languages.t('operacoes')}</Title>
                         <DrawerItem
                             icon={({ color, size }) => (
                                 <Icon
@@ -36,14 +37,14 @@ export function DrawerContent(props) {
                                     size={size}
                                 />
                             )}
-                            label="Notas"
+                            label={Languages.t('notas')}
                             labelStyle={{ color: 'black', fontSize: 12 }}
                             onPress={() => props.navigation.navigate('NotasAnonimo')}
                         />
 
                     </Drawer.Section>
                     <Drawer.Section>
-                        <Title style={styles.userprofile}>Informações</Title>
+                        <Title style={styles.userprofile}>{Languages.t('info')}</Title>
                         <DrawerItem
                             icon={({color}) => (
                                 <Icon
@@ -52,7 +53,7 @@ export function DrawerContent(props) {
                                     size={28}
                                 />
                             )}
-                            label="Suporte"
+                            label={Languages.t('suporte')}
                             labelStyle={{ color: 'black', fontSize: 12 }}
                             onPress={() => props.navigation.navigate('Sup')}
                         />
@@ -65,13 +66,13 @@ export function DrawerContent(props) {
                                     size={28}
                                 />
                             )}
-                            label="Créditos"
+                            label={Languages.t('creditos')}
                             labelStyle={{ color: 'black', fontSize: 12 }}
                             onPress={() => props.navigation.navigate('Credits')}
                         />
 
                     </Drawer.Section>
-                    <Title style={styles.userprofile}>Conta</Title>
+                    <Title style={styles.userprofile}>{Languages.t('conta')}</Title>
                     <DrawerItem
                             icon={({color}) => (
                                 <Icon
@@ -80,7 +81,7 @@ export function DrawerContent(props) {
                                     size={28}
                                 />
                             )}
-                            label="Defenições"
+                            label={Languages.t('defenicoes')}
                             labelStyle={{ color: 'black', fontSize: 12 }}
                             onPress={() => props.navigation.navigate('Defs')}
                         />

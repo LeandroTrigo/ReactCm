@@ -1,6 +1,6 @@
 import * as SQLite from 'expo-sqlite';
 import { Alert } from 'react-native';
-
+import Languages from '../components/Language'
 
 const database = SQLite.openDatabase("Notas", "1.0");
 
@@ -11,24 +11,23 @@ export default {
             database.transaction(tx => {
                 tx.executeSql(
                   "create table if not exists notas (id integer primary key not null, descricao text, data text);",
-                  console.log("Database Criada com Sucesso")
             );
         });
     },
     add(descricao, data){
 
       if (descricao === null || descricao === "") {
-        Alert.alert("Por Favor Introduza uma Descrição!")
+        Alert.alert(Languages.t('descricao'))
         return false;
       }
         
       if(descricao >= 250){
-        Alert.alert("A Descrição não deve Ultrapassar os 250 Caracteres!")
+        Alert.alert(Languages.t('descricao250'))
       }
             database.transaction(
                 tx => {
                   tx.executeSql("insert into notas (descricao, data) values (?, ?)", [descricao,data]);
-                  Alert.alert("Nota Introduzida com Sucesso!")
+                  Alert.alert(Languages.t('notaadd'))
                   tx.executeSql("select * from notas", [], (_, { rows }) =>
                   console.log(JSON.stringify(rows))
             );
@@ -54,7 +53,7 @@ export default {
       database.transaction(
         tx => {
           tx.executeSql("delete from notas where id = ?", [id],
-          Alert.alert("Nota Eliminada com Sucesso!")
+          Alert.alert(Languages.t('notadelete'))
           );
         },
         null,
@@ -66,7 +65,7 @@ export default {
         database.transaction(
             tx => {
               tx.executeSql("update notas set descricao=? where id=?", [descricao, id],
-              Alert.alert("Nota Editada com Sucesso!")
+              Alert.alert(Languages.t('notaedit'))
               );
             },
            null,

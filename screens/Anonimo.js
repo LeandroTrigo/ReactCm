@@ -9,6 +9,7 @@ import Defenicoes from '../screens/Defenicoes'
 import { Icon } from "react-native-elements";
 import {DrawerContent} from '../components/DrawerContent';
 import styles from '../styles/Styles'
+import Languages from '../components/Language'
 
 const Drawer = createDrawerNavigator();
 
@@ -16,7 +17,7 @@ const NotasStack = createStackNavigator();
 
 const NotasStackScreen = ({navigation }) => (
   <NotasStack.Navigator>
-    <NotasStack.Screen name="Notas" component={Notas} 
+    <NotasStack.Screen name={Languages.t('notas')} component={Notas} 
     options={{
     headerStyle:{
       backgroundColor: '#090459'
@@ -44,7 +45,7 @@ const SuporteStack = createStackNavigator();
 
 const SuporteStackScreen = ({navigation }) => (
   <SuporteStack.Navigator>
-    <SuporteStack.Screen name="Suporte" component={Suporte} 
+    <SuporteStack.Screen name={Languages.t('suporte')} component={Suporte} 
     options={{
     headerStyle:{
       backgroundColor: '#090459'
@@ -70,7 +71,7 @@ const CreditosStack = createStackNavigator();
 
 const CreditosStackScreen = ({navigation }) => (
   <CreditosStack.Navigator>
-    <CreditosStack.Screen name="Créditos" component={Creditos} 
+    <CreditosStack.Screen name={Languages.t('creditos')} component={Creditos} 
     options={{
     headerStyle:{
       backgroundColor: '#090459'
@@ -97,7 +98,7 @@ const DefenicoesStack = createStackNavigator();
 
 const DefenicoesStackScreen = ({navigation }) => (
   <DefenicoesStack.Navigator>
-    <DefenicoesStack.Screen name="Defenições" component={Defenicoes} 
+    <DefenicoesStack.Screen name={Languages.t('defenicoes')} component={Defenicoes} 
     options={{
     headerStyle:{
       backgroundColor: '#090459'
