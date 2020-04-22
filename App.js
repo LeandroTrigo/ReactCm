@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import MainActivity from "./screens/MainActivity";
 import Anonimo from "./screens/Anonimo";
 import Login from "./screens/Login"
+import MainPage from "./screens/MainPage"
 
 export default class App extends React.Component {
 
@@ -27,6 +28,10 @@ export default class App extends React.Component {
         >
           <Stack.Screen name="Main">
             {props => <MainActivity {...props} />}
+          </Stack.Screen>
+
+          <Stack.Screen name="MainPage">
+            {props => <MainPage {...props} />}
           </Stack.Screen>
 
           <Stack.Screen name="Anon">

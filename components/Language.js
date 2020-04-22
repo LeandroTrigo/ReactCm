@@ -24,7 +24,10 @@ i18n.translations = {
         insertnota: 'Introduza uma Nota!',
         editnota: 'Editar Nota',
         editar: 'Editar',
-        eliminar: 'Eliminar'
+        eliminar: 'Eliminar',
+        entrar: 'Entrar',
+        report: 'Reportar Problema',
+        reports: 'Ver Problemas Reportados'
     },
     en: {
         conta: 'Enter With Account',
@@ -48,7 +51,10 @@ i18n.translations = {
         insertnota: 'Insert a Note!',
         editnota: 'Edit Note',
         editar: 'Edit',
-        eliminar: 'Delete'
+        eliminar: 'Delete',
+        entrar: 'Sign In',
+        report: 'Report a Problem',
+        reports: 'See Reported Problems'
     },
 };
 
