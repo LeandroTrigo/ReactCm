@@ -103,15 +103,42 @@ export default StyleSheet.create({
         alignSelf: "center"
     },
     cardView: {
-            flexDirection: "row",
-            width: "60%",
-            marginLeft:16,
-            marginRight:16,
-            marginBottom: 8,
-            borderRadius: 50,
-            backgroundColor: '#164094',
-            elevation: 2,
-            justifyContent: "center",
-            alignSelf: "center"
+        flexDirection: "row",
+        width: "60%",
+        marginLeft: 16,
+        marginRight: 16,
+        marginBottom: 8,
+        borderRadius: 50,
+        backgroundColor: '#164094',
+        elevation: 2,
+        justifyContent: "center",
+        alignSelf: "center"
+    },
+    
+    cardViewProblema: {
+        width: 230,
+        marginLeft: 16,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingBottom: 5,
+        paddingTop: 5,
+        marginBottom: 8,
+        borderRadius: 50,
+        backgroundColor: '#164094',
+        elevation: 2,
+    },
+    mapStyle: {
+        flex: 1,
+        zIndex: -1
+    },
+    floatButton:{
+        height: 75,
+        width: 75,
+        margin: 16
+    },
+    floatButtonBackground: {
+        position: 'absolute',
+        top: "80%",
+        alignSelf: 'flex-end'
     }
 });
