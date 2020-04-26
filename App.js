@@ -5,12 +5,34 @@ import { createStackNavigator } from '@react-navigation/stack';
 import MainActivity from "./screens/MainActivity";
 import Anonimo from "./screens/Anonimo";
 import Login from "./screens/Login"
+import MainPage from "./screens/MainPage"
 
 export default class App extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.handleIdUser = this.handleIdUser.bind(this);
+    this.handleNomeUser = this.handleNomeUser.bind(this);
+
+    this.state = {
+      idUser: -1,
+      Nome: ""
+    }
+
+
   }
+
+
+    
+ handleIdUser(valor) {
+  this.setState({idUser: valor})
+}
+
+handleNomeUser(valor){
+  this.setState({Nome: valor})
+}
+
   
   render(){
 
@@ -29,13 +51,16 @@ export default class App extends React.Component {
             {props => <MainActivity {...props} />}
           </Stack.Screen>
 
+          <Stack.Screen name="MainPage">
+            {props => <MainPage {...props} idUser={this.state.idUser} Nome={this.state.Nome} />}
+          </Stack.Screen>
+
           <Stack.Screen name="Anon">
             {props => <Anonimo {...props} />}
           </Stack.Screen>
-
           
           <Stack.Screen name="Login">
-            {props => <Login {...props} />}
+            {props => <Login {...props}  handleIdUser={this.handleIdUser} handleNomeUser={this.handleNomeUser}  />}
           </Stack.Screen>
 
         </Stack.Navigator>

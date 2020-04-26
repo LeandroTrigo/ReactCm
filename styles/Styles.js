@@ -18,7 +18,7 @@ export default StyleSheet.create({
         width: 200,
         padding: 10,
     },
-    ButtonsText:{
+    ButtonsText: {
         color: '#fff',
         fontSize: 16,
         fontWeight: "bold",
@@ -49,10 +49,10 @@ export default StyleSheet.create({
     buttonnav: {
         alignItems: "center",
         marginLeft: 16
-      },
+    },
     buttonaddnota: {
         marginTop: 16,
-        marginLeft:16,
+        marginLeft: 16,
         backgroundColor: '#164094',
         width: "90%",
         padding: 10,
@@ -82,7 +82,36 @@ export default StyleSheet.create({
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
-          width: 0,
-          height: 2
-    }}
+            width: 0,
+            height: 2
+        },
+    },
+    imageLogin: {
+        height: 200,
+        width: 200,
+        marginTop: 80,
+        justifyContent: "center",
+        alignSelf: "center"
+    },
+    TitleLogin: {
+        fontSize: 30,
+        fontWeight: "bold",
+        color: '#164094',
+        marginTop: 16,
+        marginBottom: 16,
+        justifyContent: "center",
+        alignSelf: "center"
+    },
+    cardView: {
+            flexDirection: "row",
+            width: "60%",
+            marginLeft:16,
+            marginRight:16,
+            marginBottom: 8,
+            borderRadius: 50,
+            backgroundColor: '#164094',
+            elevation: 2,
+            justifyContent: "center",
+            alignSelf: "center"
+    }
 });
