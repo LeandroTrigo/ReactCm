@@ -64,6 +64,7 @@ export default class Report extends React.Component {
             })
           } else {
             console.log("Erro ao Obter Coordenadas!")
+            this.setState({gps: false})
           }
         })
 
@@ -219,7 +220,6 @@ export default class Report extends React.Component {
           coordinate={{ latitude: this.state.latitude, longitude: this.state.longitude }} >
 
           {this.state.markers.map(marker => (
-            console.log(marker),
             <Marker
               onCalloutPress={() => this.calloutPress(marker)}
               coordinate={{ latitude: marker.Latitude, longitude: marker.Longitude }}

@@ -50,9 +50,10 @@ return(
 
 const ReportsStack = createStackNavigator();
 
-const ReportsStackScreen = ({navigation }) => (
+const ReportsStackScreen = (propsrecieved) => {
+  return(
   <ReportsStack.Navigator>
-    <ReportStack.Screen name={Languages.t('reports')} component={Reports} 
+    <ReportsStack.Screen name={Languages.t('reports')}
     options={{
     headerStyle:{
       backgroundColor: '#090459'
@@ -66,13 +67,17 @@ const ReportsStackScreen = ({navigation }) => (
         name='ios-menu'
         type='ionicon'
         color='#fff'
-        onPress={() => navigation.openDrawer()}
+        onPress={() => propsrecieved.navigation.openDrawer()}
       />
       </TouchableOpacity>
     ),
-  }}/>
+  }}>
+   {props => {
+    return(<Reports {...props} idUser={propsrecieved.idUser} Nome={propsrecieved.Nome}/>)
+  }}
+   </ReportsStack.Screen>
   </ReportsStack.Navigator>
-)
+  )}
 
 
 const SuporteStack = createStackNavigator();
@@ -163,7 +168,9 @@ export default function MainPage(propsrecieved){
       <Drawer.Screen name="Report">
       {props => <ReportStackScreen {...props} idUser={propsrecieved.idUser} Nome={propsrecieved.Nome}/>}
         </Drawer.Screen> 
-      <Drawer.Screen name="Reports" component={ReportsStackScreen} />
+      <Drawer.Screen name="Reports">
+      {props => <ReportsStackScreen {...props} idUser={propsrecieved.idUser} Nome={propsrecieved.Nome}/>}
+      </Drawer.Screen>
       <Drawer.Screen name="Sup" component={SuporteStackScreen} />
       <Drawer.Screen name="Credits" component={CreditosStackScreen} />
       <Drawer.Screen name="Defs" component={DefenicoesStackScreen} />
