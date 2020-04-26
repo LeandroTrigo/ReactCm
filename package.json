@@ -40,7 +40,8 @@
     "realm": "^5.0.3",
     "react-native-maps": "0.26.1",
     "expo-permissions": "~8.1.0",
-    "expo-location": "~8.1.0"
+    "expo-location": "~8.1.0",
+    "expo-image-picker": "~8.1.0"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.1.0",

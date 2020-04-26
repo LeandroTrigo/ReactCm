@@ -27,7 +27,18 @@ i18n.translations = {
         eliminar: 'Eliminar',
         entrar: 'Entrar',
         report: 'Reportar Problema',
-        reports: 'Ver Problemas Reportados'
+        reports: 'Ver Problemas Reportados',
+        logins: 'Logado com Sucesso!',
+        loginn: 'Credências Incorretas!',
+        camera: 'Sem Permissão de Camerâ não Sera Capaz de Manipular as Fotos!',
+        nogps: 'Para Marcar um Ponto na Localização Atual Ative o Gps, Caso Contrário Faça Long Press no Mapa',
+        yesgps: 'Para Adcionar Pontos Livremente Por Favor Desative o seu Gps!',
+        ponto: 'Problema Registado com Sucesso!',
+        ponton: 'Erro ao Registar Problema!',
+        problem: 'Novo Problema',
+        addp: 'Adicionar Problema',
+        titulop: 'Insira um Titulo',
+        descricaop: 'Insira uma Descrição',
     },
     en: {
         conta: 'Enter With Account',
@@ -54,7 +65,18 @@ i18n.translations = {
         eliminar: 'Delete',
         entrar: 'Sign In',
         report: 'Report a Problem',
-        reports: 'See Reported Problems'
+        reports: 'See Reported Problems',
+        logins: 'Login Successfull!',
+        loginn: 'Incorrect Credentials!',
+        camera: 'Whithot Camera Permissions you Won\t be Alble to Manipulate Pictures!',
+        nogps: 'To Mark a Problem Enable your Gps, Otherwise LongPress on the Map!',
+        yesgps: 'To Add Points Frelly Please Disable your GPS!',
+        ponto: 'Problem Successfully Registed!',
+        ponton: 'Error Registering Problem!',
+        problem: 'New Problem',
+        addp: 'Add Problem',
+        titulop: 'Insert a Title',
+        descricaop: 'Insert a Description'
     },
 };
 

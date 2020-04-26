@@ -53,11 +53,11 @@ export default class Login extends React.Component {
       var token = response.data;
       var decoded = jwt(token);
       console.log(decoded);
-      alert("Logado com Sucesso!")
+      alert(Languages.t('logins'))
       this.goToMainPage(decoded);
     }.bind(this))
     .catch(function (error) {
-      alert("Credênciais Incorretas!")
+      alert(Languages.t('loginn'))
       console.log(error);
     });
   }
