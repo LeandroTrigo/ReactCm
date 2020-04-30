@@ -140,5 +140,8 @@ export default StyleSheet.create({
         position: 'absolute',
         top: "80%",
         alignSelf: 'flex-end'
+    }, buttonSteps:{
+        position: 'absolute',
+        alignSelf: 'flex-start'
     }
 });

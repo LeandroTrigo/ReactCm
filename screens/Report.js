@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StatusBar, TouchableOpacity, Image, Modal, Text, TextInput } from 'react-native';
+import { View, StatusBar, TouchableOpacity, Image, Modal, Text, TextInput, Button } from 'react-native';
 import floatActionButton from '../assets/plus.png'
 import Styles from '../styles/Styles'
 import MapView from 'react-native-maps';
@@ -7,9 +7,11 @@ import * as  Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import * as ImagePicker from 'expo-image-picker';
-import axios from 'axios'
-import Languages from '../components/Language'
+import axios from 'axios';
+import Languages from '../components/Language';
+import { Pedometer } from 'expo-sensors';
 
 export default class Report extends React.Component {
 
@@ -28,6 +30,7 @@ export default class Report extends React.Component {
     this.calloutPress = this.calloutPress.bind(this);
     this.closeImage = this.closeImage.bind(this);
     this.addPontoLongPress = this.addPontoLongPress.bind(this);
+    this.subscribePodometer = this.subscribePodometer.bind(this);
 
     this.state = {
       navigation: props.navigation,
@@ -46,6 +49,8 @@ export default class Report extends React.Component {
       image64: "",
       imageVisible: false,
       imageVisibleSource: "",
+      pedometerAvailable: 'checking',
+      passos: 0,
     };
 
   }
@@ -58,13 +63,13 @@ export default class Report extends React.Component {
 
           if (resultado.locationServicesEnabled && resultado.gpsAvailable) {
             Location.getCurrentPositionAsync({ enableHighAccuracy: true, accuracy: Location.Accuracy.High }).then((localizacao) => {
-              this.setState({gps: true})
+              this.setState({ gps: true })
               this.setState({ latitude: localizacao.coords.latitude, longitude: localizacao.coords.longitude, latitudeDelta: 6, longitudeDelta: 2 })
 
             })
           } else {
             console.log("Erro ao Obter Coordenadas!")
-            this.setState({gps: false})
+            this.setState({ gps: false })
           }
         })
 
@@ -89,10 +94,10 @@ export default class Report extends React.Component {
 
     console.log(this.state.gps)
 
-    if(this.state.gps == true){
+    if (this.state.gps == true) {
       this.setState({ modalVisible: true })
     }
-    else{
+    else {
       alert(Languages.t('nogps'))
     }
 
@@ -107,6 +112,13 @@ export default class Report extends React.Component {
   }
 
   componentDidMount() {
+
+    console.log("ID USER: " + this.state.idUser)
+    console.log("NOME USER: " + this.state.Nome)
+    console.log("Latitude atual: " + this.state.latitude)
+    console.log("Longitude atual: " + this.state.longitude)
+
+    this.subscribePodometer();
     this.getLocation();
     this.getPermissionCamera();
     this.getMarkers();
@@ -122,7 +134,7 @@ export default class Report extends React.Component {
 
 
   addMarker() {
-    axios.post("http://192.168.1.66:5000/pontos/criarponto", {
+    axios.post("http://192.168.1.70:5000/pontos/criarponto", {
       Titulo: this.state.tituloMarker,
       Descricao: this.state.descricaoMarker,
       IdUtilizador: this.state.idUser,
@@ -140,11 +152,11 @@ export default class Report extends React.Component {
         alert(Languages.t('ponton'))
         console.log(error);
       });
- }
+  }
 
   getMarkers() {
 
-    axios.get('http://192.168.1.66:5000/pontos/getpontos')
+    axios.get('http://192.168.1.70:5000/pontos/getpontos')
       .then(function (response) {
         this.setState({ markers: response.data })
       }.bind(this))
@@ -176,30 +188,55 @@ export default class Report extends React.Component {
   }
 
   calloutPress(marker) {
-    this.setState({ imageVisibleSource: "http://192.168.1.66:5000/" + marker.Imagem })
+    this.setState({ imageVisibleSource: "http://192.168.1.70:5000/" + marker.Imagem })
     this.setState({ imageVisible: true })
-    console.log("Imagem : " + "http://192.168.1.66:5000/" + marker.Imagem);
+    console.log("Imagem : " + "http://192.168.1.70:5000/" + marker.Imagem);
   }
 
 
-  addPontoLongPress(info){
+  addPontoLongPress(info) {
 
     this.getLocation();
 
     console.log(this.state.gps)
 
-    if(this.state.gps == false){
+    if (this.state.gps == false) {
 
-    let { nativeEvent } = info
+      let { nativeEvent } = info
 
-   console.log(nativeEvent.coordinate.latitude);
-   this.setState({latitude: nativeEvent.coordinate.latitude})
-   this.setState({longitude: nativeEvent.coordinate.longitude})
-   this.setState({modalVisible: true})
+      console.log(nativeEvent.coordinate.latitude);
+      this.setState({ latitude: nativeEvent.coordinate.latitude })
+      this.setState({ longitude: nativeEvent.coordinate.longitude })
+      this.setState({ modalVisible: true })
 
-    }else{
+    } else {
       alert(Languages.t('yesgps'))
     }
+
+  }
+
+  subscribePodometer() {
+
+    Pedometer.watchStepCount(result => {
+      this.setState({
+        passos: result.steps,
+      });
+    });
+
+    Pedometer.isAvailableAsync().then(
+      result => {
+        this.setState({
+          pedometerAvailable: String(result),
+        });
+      },
+      error => {
+        this.setState({
+          pedometerAvailable: 'Could not get isPedometerAvailable: ' + error,
+        });
+      }
+    );
+
+
 
   }
 
@@ -207,11 +244,6 @@ export default class Report extends React.Component {
   render() {
 
 
-
-    console.log("ID USER: " + this.state.idUser)
-    console.log("NOME USER: " + this.state.Nome)
-    console.log("Latitude atual: " + this.state.latitude)
-    console.log("Longitude atual: " + this.state.longitude)
 
     return (
       <View style={{ flex: 1 }}>
@@ -229,6 +261,26 @@ export default class Report extends React.Component {
           ))}
 
         </MapView>
+
+
+        <View style={Styles.buttonSteps}>
+          <TouchableOpacity
+            style={Styles.buttonaddnota}>
+            <View style={{ flexDirection: "row" }}>
+
+              <Icon2
+                name="walking"
+                color={"#fff"}
+                style={{ marginRight: 16 }}
+                size={20}
+              />
+
+              <Text style={Styles.ButtonsText}>
+                {this.state.passos}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
 
         <View style={Styles.floatButtonBackground}>
           <TouchableOpacity
@@ -307,35 +359,35 @@ export default class Report extends React.Component {
                   onPress={this.addMarker}>
                   <Text style={Styles.ButtonsText}>
                     {Languages.t('addp')}
-                      </Text>
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
         </Modal>
 
-          <Modal visible={this.state.imageVisible} transparent={true} animationType="slide">
-            <View style={{ width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
-              <View style={Styles.modalView}>
-                <TouchableOpacity
-                  style={{
-                    alignSelf: "flex-end",
-                    paddingTop: 10,
-                    paddingBottom: 10
-                  }}
-                  onPress={this.closeImage}>
+        <Modal visible={this.state.imageVisible} transparent={true} animationType="slide">
+          <View style={{ width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+            <View style={Styles.modalView}>
+              <TouchableOpacity
+                style={{
+                  alignSelf: "flex-end",
+                  paddingTop: 10,
+                  paddingBottom: 10
+                }}
+                onPress={this.closeImage}>
 
-                  <Icon
-                    name="times-circle"
+                <Icon
+                  name="times-circle"
                   color={"#000"}
                   size={28}
                 />
 
               </TouchableOpacity>
-              <View style={{borderColor: 'blue', borderWidth: 1}}>
+              <View style={{ borderColor: 'blue', borderWidth: 1 }}>
                 <Image
-                  source={{uri: this.state.imageVisibleSource}}
-                  style={{width: 200, height: 200}}
+                  source={{ uri: this.state.imageVisibleSource }}
+                  style={{ width: 200, height: 200 }}
                 ></Image>
               </View>
             </View>
