@@ -44,10 +44,15 @@ export default class Login extends React.Component {
 
   enterMainPage(){
     console.log("USERNAME: " + this.state.email + " PASSWORD: " +this.state.password);
+    
+    let emaile = Encrypt.encrypt(this.state.email)
+    let passe = Encrypt.encrypt(this.state.password)
+   
+    console.log("USERNAME: " + emaile + " PASSWORD: " + passe);
 
-    axios.post("http://192.168.1.70:5000/utilizador/login", {
-      Email: this.state.email,
-      Password: this.state.password
+    axios.post("http://192.168.1.66:5000/utilizador/login", {
+      Email: emaile,
+      Password: passe
     })
     .then(function (response) {
       var token = response.data;

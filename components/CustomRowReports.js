@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
 
 const CustomRowReports = ({ image, title, description}) => (
     <View style={styles.container}>
-        <Image source={{uri: "http://192.168.1.70:5000/" + image}} style={styles.photo} />
+        <Image source={{uri: "http://192.168.1.66:5000/" + image}} style={styles.photo} />
         <View style={styles.container_text}>
             <Text style={styles.date}>
                 {title}

@@ -12,6 +12,7 @@ import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import Languages from '../components/Language';
 import { Pedometer } from 'expo-sensors';
+import Encrypt from '../components/Encryptor'
 
 export default class Report extends React.Component {
 
@@ -134,12 +135,12 @@ export default class Report extends React.Component {
 
 
   addMarker() {
-    axios.post("http://192.168.1.70:5000/pontos/criarponto", {
-      Titulo: this.state.tituloMarker,
-      Descricao: this.state.descricaoMarker,
-      IdUtilizador: this.state.idUser,
-      Latitude: this.state.latitude,
-      Longitude: this.state.longitude,
+    axios.post("http://192.168.1.66:5000/pontos/criarponto", {
+      Titulo: Encrypt.encrypt(this.state.tituloMarker),
+      Descricao: Encrypt.encrypt(this.state.descricaoMarker),
+      IdUtilizador: Encrypt.encrypt(this.state.idUser),
+      Latitude: Encrypt.encrypt(this.state.latitude),
+      Longitude: Encrypt.encrypt(this.state.longitude),
       Imagem: this.state.image64,
     })
       .then(function (response) {
@@ -156,7 +157,7 @@ export default class Report extends React.Component {
 
   getMarkers() {
 
-    axios.get('http://192.168.1.70:5000/pontos/getpontos')
+    axios.get('http://192.168.1.66:5000/pontos/getpontos')
       .then(function (response) {
         this.setState({ markers: response.data })
       }.bind(this))
@@ -188,9 +189,9 @@ export default class Report extends React.Component {
   }
 
   calloutPress(marker) {
-    this.setState({ imageVisibleSource: "http://192.168.1.70:5000/" + marker.Imagem })
+    this.setState({ imageVisibleSource: "http://192.168.1.66:5000/" + marker.Imagem })
     this.setState({ imageVisible: true })
-    console.log("Imagem : " + "http://192.168.1.70:5000/" + marker.Imagem);
+    console.log("Imagem : " + "http://192.168.1.66:5000/" + marker.Imagem);
   }
 
 

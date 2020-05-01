@@ -6,6 +6,7 @@ import Languages from '../components/Language'
 import CustomRow from '../components/CustomRowReports';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
+import Encrypt from '../components/Encryptor'
 
 export default class Reports extends React.Component {
 
@@ -47,7 +48,7 @@ export default class Reports extends React.Component {
         console.log("ID USER: " + this.state.idUser)
         console.log("NOME USER: " + this.state.Nome)
 
-        axios.get('http://192.168.1.70:5000/pontos/getpontosuser/' + this.state.idUser)
+        axios.get('http://192.168.1.66:5000/pontos/getpontosuser/' + this.state.idUser)
             .then(function (response) {
                 console.log(response.data)
                 this.setState({ pontosUser: response.data })
@@ -59,7 +60,7 @@ export default class Reports extends React.Component {
 
     actionOnRow(item) {
         this.setState({ pontoeditar: item.IdPonto })
-        this.setState({ imageeditar: "http://192.168.1.70:5000/" + item.Imagem })
+        this.setState({ imageeditar: "http://192.168.1.66:5000/" + item.Imagem })
         this.setState({ tituloeditar: item.Titulo })
         this.setState({ descricaoeditar: item.Descricao })
         this.setState({ modalVisible: true })
@@ -103,9 +104,9 @@ export default class Reports extends React.Component {
 
     editMarker() {
 
-        axios.put("http://192.168.1.70:5000/pontos/updatepontos/" + this.state.pontoeditar, {
-            Titulo: this.state.tituloeditar,
-            Descricao: this.state.descricaoeditar,
+        axios.put("http://192.168.1.66:5000/pontos/updatepontos/" + this.state.pontoeditar, {
+            Titulo: Encrypt.encrypt(this.state.tituloeditar),
+            Descricao: Encrypt.encrypt(this.state.descricaoeditar),
             Imagem: this.state.image64,
         })
             .then(function (response) {
@@ -123,7 +124,7 @@ export default class Reports extends React.Component {
 
 
     deleteMarker() {
-        axios.delete("http://192.168.1.70:5000/pontos/deletepontos/" + this.state.pontoeditar)
+        axios.delete("http://192.168.1.66:5000/pontos/deletepontos/" + this.state.pontoeditar)
             .then(function (response) {
                 console.log(response)
                 this.setState({ modalVisible: false })
