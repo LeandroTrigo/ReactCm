@@ -25,11 +25,11 @@ export default class MainActivity extends React.Component{
   }
 
   enterAnonimo(){
-    this.state.navigation.navigate("Anon");
+    this.state.navigation.replace("Anon");
   }
 
   enterLogin(){
-    this.state.navigation.navigate("Login");
+    this.state.navigation.replace("Login");
   }
   
   componentDidMount() {

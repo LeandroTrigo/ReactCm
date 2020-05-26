@@ -58,7 +58,7 @@ export function DrawerContentMain(props) {
                     </Drawer.Section>
                     <Drawer.Section>
                         <Title style={styles.userprofile}>{Languages.t('info')}</Title>
-                        <DrawerItem
+                        {/*<DrawerItem
                             icon={({color}) => (
                                 <Icon
                                     name="question-circle-o"
@@ -69,7 +69,7 @@ export function DrawerContentMain(props) {
                             label={Languages.t('suporte')}
                             labelStyle={{ color: 'black', fontSize: 12 }}
                             onPress={() => props.navigation.navigate('Sup')}
-                        />
+                            />*/}
 
                         <DrawerItem
                             icon={({color}) => (
@@ -86,7 +86,7 @@ export function DrawerContentMain(props) {
 
                     </Drawer.Section>
                     <Title style={styles.userprofile}>{Languages.t('conta')}</Title>
-                    <DrawerItem
+                    {/*<DrawerItem
                             icon={({color}) => (
                                 <Icon
                                     name="wrench"
@@ -98,6 +98,7 @@ export function DrawerContentMain(props) {
                             labelStyle={{ color: 'black', fontSize: 12 }}
                             onPress={() => props.navigation.navigate('Defs')}
                         />
+                            */}
                         <DrawerItem
                             icon={({color}) => (
                                 <Icon
@@ -108,7 +109,7 @@ export function DrawerContentMain(props) {
                             )}
                             label="Log Out"
                             labelStyle={{ color: 'black', fontSize: 12 }}
-                            onPress={() => props.navigation.popToTop()}
+                            onPress={() => props.navigation.replace ("Main")}
                         />
                     <Drawer.Section>
 

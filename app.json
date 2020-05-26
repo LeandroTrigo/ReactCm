@@ -23,6 +23,10 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android":{
+      "package": "e.utilizador.around",
+      "googleServicesFile": "./google-services.json"
     }
   }
 }

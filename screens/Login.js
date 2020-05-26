@@ -5,6 +5,8 @@ import Styles from '../styles/Styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Languages from '../components/Language'
 import axios from 'axios'
+import * as ScreenOrientation from 'expo-screen-orientation';
+import { DeviceMotion } from 'expo-sensors';
 import jwt from 'jwt-decode'
 import Encrypt from '../components/Encryptor'
 
@@ -19,11 +21,13 @@ export default class Login extends React.Component {
     this.goToMainPage = this.goToMainPage.bind(this);
     this.storeData = this.storeData.bind(this);
     this.getData = this.getData.bind(this);
+    this.returnMain = this.returnMain.bind(this);
 
     this.state = {
       navigation: props.navigation,
       handleIdUser: props.handleIdUser,
       handleNomeUser: props.handleNomeUser,
+      currentOrientation: 0,
       email: "",
       password: "",
       checked: false
@@ -50,7 +54,7 @@ export default class Login extends React.Component {
    
     console.log("USERNAME: " + emaile + " PASSWORD: " + passe);
 
-    axios.post("http://192.168.1.66:5000/utilizador/login", {
+    axios.post("http://192.168.1.70:5000/utilizador/login", {
       Email: emaile,
       Password: passe
     })
@@ -68,7 +72,7 @@ export default class Login extends React.Component {
   }
 
   goToMainPage(token){
-      this.state.navigation.navigate("MainPage");
+      this.state.navigation.replace("MainPage");
 
       this.state.handleIdUser(token.IdUtilizador);
       this.state.handleNomeUser(token.Nome)
@@ -100,10 +104,26 @@ export default class Login extends React.Component {
     }
   }
 
+  returnMain(){
+    this.state.navigation.replace("Main");
+  }
+
+    componentDidMount() {
+    ScreenOrientation.unlockAsync();
+
+
+   DeviceMotion.addListener(({rotation}) => {
+    ScreenOrientation.getOrientationAsync().then(data => this.setState({currentOrientation: data}));
+   })
+  }
+
 
   render() {
+    
     return (
       <View>
+        {this.state.currentOrientation == 1 &&
+        <View>
         <View>
           <Image
             source={LoginImage}
@@ -159,6 +179,92 @@ export default class Login extends React.Component {
             checked={this.state.checked}
             onPress={() => this.setState({checked: !this.state.checked})}
           ></CheckBox>
+          <Text style={{ fontWeight: "bold", color: '#164094' }}>{Languages.t('remember')}</Text>
+        </View>
+        <View style={{justifyContent: "center", alignSelf: "center"}}>
+          <TouchableOpacity
+            style={Styles.Buttons}
+            onPress={this.enterMainPage}
+          >
+            <Text style={Styles.ButtonsText}>
+            {Languages.t('entrar')}
+                      </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{
+              backgroundColor: '#164094',
+              width: 200,
+              padding: 10,
+              marginTop: 5}}
+            onPress={() => this.returnMain()}
+          >
+            <Text style={Styles.ButtonsText}>
+            {Languages.t('voltar')}
+                      </Text>
+          </TouchableOpacity>
+        </View>
+        </View>}
+        
+        {this.state.currentOrientation != 1 &&
+          <View style={{flexDirection: "row"}}>
+          <View style={{width: "40%"}}>
+          <Image
+            source={LoginImage}
+            style={Styles.imageLoginLand}
+          ></Image>
+          <Text
+            style={Styles.TitleLoginLand}>
+            Login</Text>
+        </View>
+
+        <View style={{width: "60%"}}>
+        <View style={Styles.cardViewLand}>
+          <TextInput
+            style={{ height: 50, color: "#fff", fontWeight: "bold", width: "80%" }}
+            placeholder={'Password'}
+            placeholderTextColor={'#fff'}
+            secureTextEntry
+            onChangeText={this.passwordHandler}
+            maxLength={200}
+          />
+          <Icon
+            style={{ marginTop: 15 }}
+            name="user"
+            color={"#fff"}
+            size={20}
+          />
+        </View>
+        <View style={Styles.cardView}>
+          <TextInput
+            style={{ height: 50, color: "#fff", fontWeight: "bold", width: "80%" }}
+            placeholder={'Password'}
+            placeholderTextColor={'#fff'}
+            secureTextEntry
+            onChangeText={this.passwordHandler}
+            maxLength={200}
+          />
+          <Icon
+            style={{ marginTop: 15 }}
+            name="lock"
+            color={"#fff"}
+            size={20}
+          />
+        </View>
+
+        <View
+          style={{
+            width: "100%",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 10
+          }}
+        >
+          <CheckBox
+            checked={this.state.checked}
+            onPress={() => this.setState({checked: !this.state.checked})}
+          ></CheckBox>
           <Text style={{ fontWeight: "bold", color: '#164094' }}>Lembra-me</Text>
         </View>
         <View style={{justifyContent: "center", alignSelf: "center"}}>
@@ -170,7 +276,24 @@ export default class Login extends React.Component {
             {Languages.t('entrar')}
                       </Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{
+              backgroundColor: '#164094',
+              width: 200,
+              padding: 10,
+              marginTop: 5}}
+            onPress={() => this.returnMain()}
+          >
+            <Text style={Styles.ButtonsText}>
+            {Languages.t('voltar')}
+                      </Text>
+          </TouchableOpacity>
         </View>
+
+          </View>
+          </View>
+        }
       </View>
     )
   }
