@@ -57,6 +57,13 @@ export default StyleSheet.create({
         width: "90%",
         padding: 10,
     },
+    buttonaddnotaLand: {
+        marginTop: 16,
+        backgroundColor: '#164094',
+        width: "95%",
+        alignSelf: "center",
+        padding: 10,
+    },
     doublebutton1: {
         marginTop: 16,
         backgroundColor: '#164094',
@@ -66,6 +73,15 @@ export default StyleSheet.create({
     doublebutton2: {
         marginTop: 16,
         backgroundColor: '#164094',
+        marginLeft: 5,
+        width: "50%",
+        padding: 10,
+    },
+    
+    doublebutton2Land: {
+        marginTop: 16,
+        backgroundColor: '#164094',
+        justifyContent: "center",
         marginLeft: 5,
         width: "50%",
         padding: 10,
@@ -86,12 +102,35 @@ export default StyleSheet.create({
             height: 2
         },
     },
+    modalViewLand: {
+        marginRight: 20,
+        marginLeft: 20,
+        marginBottom: 20,
+        width: "80%",
+        backgroundColor: "white",
+        borderRadius: 20,
+        paddingLeft: 30,
+        paddingBottom: 30,
+        paddingRight: 30,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+    },
     imageLogin: {
         height: 200,
         width: 200,
         marginTop: 80,
         justifyContent: "center",
         alignSelf: "center"
+    },
+    imageLoginLand: {
+        marginTop: 30,
+        marginLeft: 70,
+        height: 200,
+        width: 200,
     },
     TitleLogin: {
         fontSize: 30,
@@ -102,11 +141,31 @@ export default StyleSheet.create({
         justifyContent: "center",
         alignSelf: "center"
     },
+    TitleLoginLand: {
+        fontSize: 30,
+        fontWeight: "bold",
+        marginLeft: 130,
+        color: '#164094',
+        marginTop: 16,
+    },
     cardView: {
         flexDirection: "row",
         width: "60%",
         marginLeft: 16,
         marginRight: 16,
+        marginBottom: 8,
+        borderRadius: 50,
+        backgroundColor: '#164094',
+        elevation: 2,
+        justifyContent: "center",
+        alignSelf: "center"
+    },
+    cardViewLand: {
+        flexDirection: "row",
+        width: "60%",
+        marginLeft: 16,
+        marginRight: 16,
+        marginTop: 50,
         marginBottom: 8,
         borderRadius: 50,
         backgroundColor: '#164094',
@@ -127,6 +186,17 @@ export default StyleSheet.create({
         backgroundColor: '#164094',
         elevation: 2,
     },
+    cardViewProblemaLand: {
+        width: 230,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingBottom: 5,
+        paddingTop: 5,
+        marginBottom: 8,
+        borderRadius: 50,
+        backgroundColor: '#164094',
+        elevation: 2,
+    },
     mapStyle: {
         flex: 1,
         zIndex: -1
@@ -135,6 +205,13 @@ export default StyleSheet.create({
         height: 75,
         width: 75,
         margin: 16
+    },
+    
+    floatButtonLand:{
+        height: 50,
+        width: 50,
+        marginRight: 16,
+        marginBottom: 30
     },
     floatButtonBackground: {
         position: 'absolute',

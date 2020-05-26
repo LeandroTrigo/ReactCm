@@ -1,12 +1,14 @@
 import * as React from 'react';
-import {View, Text, TouchableOpacity,FlatList, Modal, TextInput} from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Modal, TextInput } from 'react-native';
 import Styles from '../styles/Styles'
 import CustomRow from '../components/CustomRow'
 import Database from '../components/Database'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Languages from '../components/Language'
+import * as ScreenOrientation from 'expo-screen-orientation';
+import { DeviceMotion } from 'expo-sensors';
 
-var today = new Date(),date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+var today = new Date(), date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
 
 export default class NotasScreen extends React.Component {
@@ -29,181 +31,311 @@ export default class NotasScreen extends React.Component {
       navigation: props.navigation,
       modalVisible: false,
       modalEditVisible: false,
+      currentOrientation: 0,
       textEdit: "",
       textNota: "",
       idEditar: 0,
       notas: []
     };
-  
+
   }
 
-  setModalVisible(){
-   this.setState({modalVisible: true})
+  setModalVisible() {
+    this.setState({ modalVisible: true })
   }
 
-  addNota(){
-    this.setState({modalVisible: false})
-    Database.add(this.state.textNota,date)
+  addNota() {
+    this.setState({ modalVisible: false })
+    Database.add(this.state.textNota, date)
     this.fillLista()
   }
 
-  cancelModal(){
-    this.setState({modalVisible: false})
+  cancelModal() {
+    this.setState({ modalVisible: false })
   }
 
   handleValor(e) {
-    this.state.textNota = e; 
+    this.state.textNota = e;
   }
 
 
-  fillLista(){
-     Database.select().then(res => {
-      this.setState({notas: res.rows._array})
+  fillLista() {
+    Database.createDatabase()
+    Database.select().then(res => {
+      this.setState({ notas: res.rows._array })
       console.log(this.state.notas)
     }).catch(err => console.log(err));
   }
 
-  componentDidMount(){
+  componentDidMount() {
+
+    ScreenOrientation.unlockAsync();
+
+
+    DeviceMotion.addListener(({ rotation }) => {
+      ScreenOrientation.getOrientationAsync().then(data => this.setState({ currentOrientation: data }));
+    })
+
     this.fillLista()
   }
 
-  actionOnRow(item){
-    this.setState({textEdit: item.descricao})
-    this.setState({idEditar: item.id})
-    this.setState({modalEditVisible: true})
+  actionOnRow(item) {
+    this.setState({ textEdit: item.descricao })
+    this.setState({ idEditar: item.id })
+    this.setState({ modalEditVisible: true })
     console.log('Selected item ' + item.id)
     console.log('Selected item ' + item.descricao)
   }
 
-  EditarNota(){
-    this.setState({modalEditVisible: false})
-    Database.update(this.state.idEditar,this.state.textEdit)
+  EditarNota() {
+    this.setState({ modalEditVisible: false })
+    Database.update(this.state.idEditar, this.state.textEdit)
     this.fillLista()
   }
 
-  EliminarNota(){
-    this.setState({modalEditVisible: false})
+  EliminarNota() {
+    this.setState({ modalEditVisible: false })
     Database.delete(this.state.idEditar)
     this.fillLista()
   }
 
-  cancelEditModal(){
-    this.setState({modalEditVisible: false})
+  cancelEditModal() {
+    this.setState({ modalEditVisible: false })
   }
 
-  
+
   handleEditValor(x) {
-    this.setState({textEdit: x})
+    this.setState({ textEdit: x })
   }
-  
-  
 
 
 
-  render(){
+
+
+  render() {
 
     return (
       <View>
-        <FlatList
-                style={{height: "87%"}}
-                data={this.state.notas}
-                renderItem={({ item }) => 
+        {this.state.currentOrientation == 1 &&
+          <View>
+            <FlatList
+              style={{ height: "87%" }}
+              data={this.state.notas}
+              renderItem={({ item }) =>
 
-                <TouchableOpacity onPress={ () => this.actionOnRow(item)}>
-                <CustomRow
+                <TouchableOpacity onPress={() => this.actionOnRow(item)}>
+                  <CustomRow
                     title={item.data}
                     description={item.descricao}
-                />
+                  />
                 </TouchableOpacity>}
             />
-        <TouchableOpacity  
-        style={Styles.buttonaddnota}
-        onPress ={this.setModalVisible}>
-        <Text style={Styles.ButtonsText}>
-        {Languages.t('newnota')}
-                      </Text>
-        </TouchableOpacity>
+            <TouchableOpacity
+              style={Styles.buttonaddnota}
+              onPress={this.setModalVisible}>
+              <Text style={Styles.ButtonsText}>
+                {Languages.t('newnota')}
+              </Text>
+            </TouchableOpacity>
 
-        <Modal visible={this.state.modalVisible} transparent={true} animationType="slide">
-        <View style={Styles.modalView}>
-        <TouchableOpacity  
-        style={{alignSelf: "flex-end",
-          padding: 5,
-          marginTop: 16}}
-        onPress ={this.cancelModal}>
+            <Modal visible={this.state.modalVisible} transparent={true} animationType="slide">
+            <View style={{ width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+              <View style={Styles.modalView}>
+                <TouchableOpacity
+                  style={{
+                    alignSelf: "flex-end",
+                    padding: 5,
+                    marginTop: 16
+                  }}
+                  onPress={this.cancelModal}>
 
-         <Icon
-                                    name="times-circle"
-                                    color={"#000"}
-                                    size={28}
-                                />
+                  <Icon
+                    name="times-circle"
+                    color={"#000"}
+                    size={28}
+                  />
 
-        </TouchableOpacity>
-            <Text style={{fontSize: 20,fontWeight: "bold"}}>{Languages.t('newnota2')}</Text>
-            <TextInput
-            style={{height: 80,textAlign: "center"}}
-            placeholder={Languages.t('insertnota')}
-            onChangeText={this.handleValor}
-            maxLength={200}
-      />
-      <View style={{flexDirection: "row"}}>
-            <TouchableOpacity  
-        style={Styles.buttonaddnota}
-        onPress ={this.addNota}>
-        <Text style={Styles.ButtonsText}>
-                          {Languages.t('newnota3')}
-                      </Text>
-        </TouchableOpacity>
-        </View>
-        </View>
-        </Modal>
+                </TouchableOpacity>
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>{Languages.t('newnota2')}</Text>
+                <TextInput
+                  style={{ height: 80, textAlign: "center" }}
+                  placeholder={Languages.t('insertnota')}
+                  onChangeText={this.handleValor}
+                  maxLength={200}
+                />
+                <View style={{ flexDirection: "row"}}>
+                  <TouchableOpacity
+                    style={Styles.buttonaddnota}
+                    onPress={this.addNota}>
+                    <Text style={Styles.ButtonsText}>
+                      {Languages.t('newnota3')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              </View>
+            </Modal>
 
-        <Modal visible={this.state.modalEditVisible} transparent={true} animationType="slide">
-        <View style={Styles.modalView}>
-        <TouchableOpacity  
-        style={{alignSelf: "flex-end",
-          padding: 5,
-          marginTop: 16}}
-        onPress ={this.cancelEditModal}>
+            <Modal visible={this.state.modalEditVisible} transparent={true} animationType="slide">
+            <View style={{ width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+              <View style={Styles.modalView}>
+                <TouchableOpacity
+                  style={{
+                    alignSelf: "flex-end",
+                    padding: 5,
+                    marginTop: 16
+                  }}
+                  onPress={this.cancelEditModal}>
 
-         <Icon
-                                    name="times-circle"
-                                    color={"#000"}
-                                    size={28}
-                                />
+                  <Icon
+                    name="times-circle"
+                    color={"#000"}
+                    size={28}
+                  />
 
-        </TouchableOpacity>
-          
-            <Text style={{fontSize: 20,fontWeight: "bold"}}>{Languages.t('editnota')}</Text>
-            <TextInput
-            style={{height: 80,textAlign: "center"}}
-            value={this.state.textEdit}
-            onChangeText={this.handleEditValor}
-            maxLength={200}
-      />
-      <View style={{flexDirection: "row"}}>
+                </TouchableOpacity>
 
-        <TouchableOpacity  
-        style={Styles.doublebutton1}
-        onPress ={this.EliminarNota}>
-        <Text style={Styles.ButtonsText}>
-                        {Languages.t('eliminar')}
-                      </Text>
-        </TouchableOpacity>
-            <TouchableOpacity  
-        style={Styles.doublebutton2}
-        onPress ={this.EditarNota}>
-        <Text style={Styles.ButtonsText}>
-                        {Languages.t('editar')}
-                      </Text>
-        </TouchableOpacity>
-        </View>
-        </View>
-        </Modal>
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>{Languages.t('editnota')}</Text>
+                <TextInput
+                  style={{ height: 80, textAlign: "center" }}
+                  value={this.state.textEdit}
+                  onChangeText={this.handleEditValor}
+                  maxLength={200}
+                />
+                <View style={{ flexDirection: "row" }}>
+
+                  <TouchableOpacity
+                    style={Styles.doublebutton1}
+                    onPress={this.EliminarNota}>
+                    <Text style={Styles.ButtonsText}>
+                      {Languages.t('eliminar')}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={Styles.doublebutton2}
+                    onPress={this.EditarNota}>
+                    <Text style={Styles.ButtonsText}>
+                      {Languages.t('editar')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              </View>
+            </Modal>
 
 
+          </View>}
+        {this.state.currentOrientation != 1 &&
+          <View>
+            <FlatList
+              style={{ height: "80%" }}
+              data={this.state.notas}
+              renderItem={({ item }) =>
+
+                <TouchableOpacity onPress={() => this.actionOnRow(item)}>
+                  <CustomRow
+                    title={item.data}
+                    description={item.descricao}
+                  />
+                </TouchableOpacity>}
+            />
+            <TouchableOpacity
+              style={Styles.buttonaddnotaLand}
+              onPress={this.setModalVisible}>
+              <Text style={Styles.ButtonsText}>
+                {Languages.t('newnota')}
+              </Text>
+            </TouchableOpacity>
+
+            <Modal visible={this.state.modalVisible} transparent={true} animationType="slide">
+            <View style={{ width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+              <View style={Styles.modalView}>
+                <TouchableOpacity
+                  style={{
+                    alignSelf: "flex-end",
+                    padding: 5,
+                    marginTop: 16
+                  }}
+                  onPress={this.cancelModal}>
+
+                  <Icon
+                    name="times-circle"
+                    color={"#000"}
+                    size={28}
+                  />
+
+                </TouchableOpacity>
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>{Languages.t('newnota2')}</Text>
+                <TextInput
+                  style={{ height: 80, textAlign: "center" }}
+                  placeholder={Languages.t('insertnota')}
+                  onChangeText={this.handleValor}
+                  maxLength={200}
+                />
+                <View style={{ flexDirection: "row" }}>
+                  <TouchableOpacity
+                    style={Styles.buttonaddnota}
+                    onPress={this.addNota}>
+                    <Text style={Styles.ButtonsText}>
+                      {Languages.t('newnota3')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              </View>
+            </Modal>
+
+            <Modal visible={this.state.modalEditVisible} transparent={true} animationType="slide">
+            <View style={{ width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+              <View style={Styles.modalView}>
+                <TouchableOpacity
+                  style={{
+                    alignSelf: "flex-end",
+                    padding: 5,
+                    marginTop: 16
+                  }}
+                  onPress={this.cancelEditModal}>
+
+                  <Icon
+                    name="times-circle"
+                    color={"#000"}
+                    size={28}
+                  />
+
+                </TouchableOpacity>
+
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>{Languages.t('editnota')}</Text>
+                <TextInput
+                  style={{ height: 80, textAlign: "center" }}
+                  value={this.state.textEdit}
+                  onChangeText={this.handleEditValor}
+                  maxLength={200}
+                />
+                <View style={{ flexDirection: "row" }}>
+
+                  <TouchableOpacity
+                    style={Styles.doublebutton1}
+                    onPress={this.EliminarNota}>
+                    <Text style={Styles.ButtonsText}>
+                      {Languages.t('eliminar')}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={Styles.doublebutton2}
+                    onPress={this.EditarNota}>
+                    <Text style={Styles.ButtonsText}>
+                      {Languages.t('editar')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              </View>
+            </Modal>
+
+
+          </View>
+        }
       </View>
     );
-  }}
-
-  
+  }
+}

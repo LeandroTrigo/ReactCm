@@ -7,6 +7,8 @@ import CustomRow from '../components/CustomRowReports';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 import Encrypt from '../components/Encryptor'
+import * as ScreenOrientation from 'expo-screen-orientation';
+import { DeviceMotion } from 'expo-sensors';
 
 export default class Reports extends React.Component {
 
@@ -27,6 +29,7 @@ export default class Reports extends React.Component {
             navigation: props.navigation,
             idUser: props.idUser,
             Nome: props.Nome,
+            currentOrientation: 0,
             pontosUser: [],
             modalVisible: false,
             pontoeditar: -1,
@@ -40,6 +43,13 @@ export default class Reports extends React.Component {
 
     componentDidMount() {
         this.getPontosUser()
+
+        ScreenOrientation.unlockAsync();
+
+
+        DeviceMotion.addListener(({rotation}) => {
+         ScreenOrientation.getOrientationAsync().then(data => this.setState({currentOrientation: data}));
+        })
     }
 
     getPontosUser() {
@@ -48,7 +58,7 @@ export default class Reports extends React.Component {
         console.log("ID USER: " + this.state.idUser)
         console.log("NOME USER: " + this.state.Nome)
 
-        axios.get('http://192.168.1.66:5000/pontos/getpontosuser/' + this.state.idUser)
+        axios.get('http://192.168.1.70:5000/pontos/getpontosuser/' + this.state.idUser)
             .then(function (response) {
                 console.log(response.data)
                 this.setState({ pontosUser: response.data })
@@ -60,7 +70,7 @@ export default class Reports extends React.Component {
 
     actionOnRow(item) {
         this.setState({ pontoeditar: item.IdPonto })
-        this.setState({ imageeditar: "http://192.168.1.66:5000/" + item.Imagem })
+        this.setState({ imageeditar: "http://192.168.1.70:5000/" + item.Imagem })
         this.setState({ tituloeditar: item.Titulo })
         this.setState({ descricaoeditar: item.Descricao })
         this.setState({ modalVisible: true })
@@ -104,7 +114,7 @@ export default class Reports extends React.Component {
 
     editMarker() {
 
-        axios.put("http://192.168.1.66:5000/pontos/updatepontos/" + this.state.pontoeditar, {
+        axios.put("http://192.168.1.70:5000/pontos/updatepontos/" + this.state.pontoeditar, {
             Titulo: Encrypt.encrypt(this.state.tituloeditar),
             Descricao: Encrypt.encrypt(this.state.descricaoeditar),
             Imagem: this.state.image64,
@@ -112,11 +122,11 @@ export default class Reports extends React.Component {
             .then(function (response) {
                 console.log(response)
                 this.setState({ modalVisible: false })
-                alert("Ponto Editado com Sucesso!")
+                alert(Languages.t('pontoeditados'))
                 this.getPontosUser()
             }.bind(this))
             .catch(function (error) {
-                alert("Erro ao Editar Ponto!")
+                alert(Languages.t('pontoeditadon'))
                 console.log(error);
             });
 
@@ -124,22 +134,26 @@ export default class Reports extends React.Component {
 
 
     deleteMarker() {
-        axios.delete("http://192.168.1.66:5000/pontos/deletepontos/" + this.state.pontoeditar)
+        axios.delete("http://192.168.1.70:5000/pontos/deletepontos/" + this.state.pontoeditar)
             .then(function (response) {
                 console.log(response)
                 this.setState({ modalVisible: false })
-                alert("Ponto Apagado com Sucesso!")
+                alert(Languages.t('pontoapagados'))
                 this.getPontosUser()
             }.bind(this))
             .catch(function (error) {
-                alert("Erro ao Apagar Ponto!")
+                alert(Languages.t('pontoapagadon'))
                 console.log(error);
             });
     }
 
+
+
     render() {
 
         return (
+        <View>
+        {this.state.currentOrientation == 1 &&
             <View>
                 <FlatList
                     style={{ height: "100%" }}
@@ -174,7 +188,7 @@ export default class Reports extends React.Component {
 
                             </TouchableOpacity>
 
-                            <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>Editar Problema</Text>
+                            <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>{Languages.t('pontop')}</Text>
 
 
                             <TouchableOpacity
@@ -213,7 +227,7 @@ export default class Reports extends React.Component {
                                     style={Styles.doublebutton1}
                                     onPress={this.deleteMarker}>
                                     <Text style={Styles.ButtonsText}>
-                                        Apagar Ponto
+                                       {Languages.t('pontod')}
             </Text>
                                 </TouchableOpacity>
 
@@ -221,7 +235,7 @@ export default class Reports extends React.Component {
                                     style={Styles.doublebutton2}
                                     onPress={this.editMarker}>
                                     <Text style={Styles.ButtonsText}>
-                                        Editar Ponto
+                                       {Languages.t('pontoe')}
             </Text>
                                 </TouchableOpacity>
                             </View>
@@ -230,8 +244,113 @@ export default class Reports extends React.Component {
                         </View>
                     </View>
                 </Modal>
-            </View>
-        )
+            </View>}
+        {this.state.currentOrientation != 1 &&
+        <View>
+
+                <FlatList
+                    style={{ height: "100%" }}
+                    data={this.state.pontosUser}
+                    renderItem={({ item }) =>
+
+                        <TouchableOpacity onPress={() => this.actionOnRow(item)}>
+                            <CustomRow
+                                title={item.Titulo}
+                                description={item.Descricao}
+                                image={item.Imagem}
+                            />
+                        </TouchableOpacity>}
+                />
+
+<Modal visible={this.state.modalVisible} transparent={true} animationType="slide">
+                    <View style={{ width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                        
+                        <View style={Styles.modalViewLand}>
+                            <TouchableOpacity
+                                style={{
+                                    alignSelf: "flex-end",
+                                    padding: 5,
+                                    marginTop: 16
+                                }}
+                                onPress={this.closePopUp}>
+
+                                <Icon
+                                    name="times-circle"
+                                    color={"#000"}
+                                    size={28}
+                                />
+
+                            </TouchableOpacity>
+
+                            <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>{Languages.t('pontop')}</Text>
+
+
+                            <View style={{flexDirection: "row"}}>
+                            <View style={{width: "50%"}}>
+                            <TouchableOpacity
+                                onPress={this._pickImage}
+                                style={{alignSelf: "flex-start"}}>
+                                <View
+                                    style={{ backgroundColor: "#000", height: 200, width: 200, marginBottom: 16}}>
+                                    {this.state.imageeditar && <Image source={{ uri: this.state.imageeditar }} style={{ width: 200, height: 200 }} />}
+                                </View>
+                            </TouchableOpacity>
+                            </View>
+
+                            <View style={{width: "50%"}}>
+
+                            <View style={Styles.cardViewProblemaLand}>
+                                <TextInput
+                                    style={{ height: 40, textAlign: "center", color: "#fff" }}
+                                    placeholderTextColor="#fff"
+                                    value={this.state.tituloeditar}
+                                    onChangeText={this.handleTitulo}
+                                    maxLength={30}
+                                />
+                            </View>
+                            <View style={Styles.cardViewProblemaLand}>
+                                <TextInput
+                                    style={{ height: 40, textAlign: "center", color: "#fff" }}
+                                    multiline={true}
+                                    numberOfLines={4}
+                                    placeholderTextColor="#fff"
+                                    value={this.state.descricaoeditar}
+                                    onChangeText={this.handleDescricao}
+                                    maxLength={150}
+                                />
+                            </View>
+                            <View style={{ flexDirection: "row" }}>
+
+                                <TouchableOpacity
+                                    style={Styles.doublebutton1}
+                                    onPress={this.deleteMarker}>
+                                    <Text style={Styles.ButtonsText}>
+                                        {Languages.t('pontod')}
+            </Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={Styles.doublebutton2Land}
+                                    onPress={this.editMarker}>
+                                    <Text style={Styles.ButtonsText}>
+                                      {Languages.t('pontoe')}
+            </Text>
+                                </TouchableOpacity>
+                            </View>
+                            </View>
+
+                            </View>
+
+
+
+
+                            </View>
+                            </View>
+                            </Modal>
+
+        </View>
+    }
+    </View>)
     }
 
 }
